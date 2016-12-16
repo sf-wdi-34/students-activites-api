@@ -23,12 +23,18 @@ app.get('/', function(request, response){
 
 // routes for students
 // - `GET	/students`	 	  display a list of all students
-
-
-
-
+app.get('/students', function(request, response){
+  db.Student.find({}, function(sadface, students){
+    if (sadface) {
+      response.status(500).send('server error');
+    } else {
+      response.json(students); //sends as JSON
+    }
+  });
+});
 
 // - `POST	/students`	    create a new student
+
 // - `GET	/students/1`	  display a specific student
 // - `PUT	/students/1`	  update a specific student
 // - `DELETE	/students/1`  delete a specific student
