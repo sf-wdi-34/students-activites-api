@@ -62,7 +62,81 @@ app.post('/students', function(request, response){
 });
 
 // - `GET	/students/1`	  display a specific student
+app.get('/students/:id', function(request, response){
+  // find the correct student by id
+  db.Student.findOne({ _id: request.params.id }, function(err, foundStudent){
+    // if err
+    if (err){
+      response.status(500).send('error: ', err);
+    } else {
+      // else (we found the student!)
+      // send back student Data
+      response.json(foundStudent);
+    }
+  });
+});
+
+
 // - `PUT	/students/1`	  update a specific student
+// - `PATCH /students/1` Brianna's preference
+app.patch('/students/:id', function(request, response){
+  // find the correct student by id
+  db.Student.findOne({ _id: request.params.id }, function(err, foundStudent){
+    // if err
+    if (err){
+      response.status(500).send('error: ', err);
+    } else {
+      console.log('found student', foundStudent);
+      // else (we found the student!) - foundStudent
+      // update student data from form data (user entered on client side)
+      // grab new student info from request body
+      foundStudent.firstName = request.body.firstName;
+      if (request.body.lastName){
+        foundStudent.lastName = request.body.lastName;
+      }
+      foundStudent.monthsCoding = Number(request.body.monthsOfCoding);
+      // foundStudent.monthsCoding = parseInt(request.body.monthsOfCoding);
+      foundStudent.hometown = request.body.hometown || foundStudent.hometown;
+      foundStudent.currentTown = request.body.currentTown || foundStudent.currentTown;
+      foundStudent.likesCoffee = request.body.coffee || foundStudent.likesCoffee;
+      // save modified student
+      foundStudent.save(function(err, savedStudent){
+        if (err){
+          response.status(500).send('database error');
+        } else {
+          // send back student Data
+          response.json(foundStudent);
+        }
+      })
+    }
+  });
+});
+
+// UNTESTED
+// app.patch('/students/:id', function(request, response){
+//   // find and update one student by id
+//   db.Student.findByIdAndUpdate(request.params.id,
+//     {
+//       $set: {
+//         firstName: request.body.firstName,
+//         hometown: request.body.hometown
+//       }
+//     },
+//     {
+//       new: true  // says to use the updated version in callback
+//     },
+//     function(err, updatedStudent){
+//       if (err) {
+//         response.status(500).send('database error!');
+//       } else {
+//         res.send(tank);
+//       }
+//     });  // end of findByIdAndUpdate
+//   }); // end of route handler callback
+// });
+
+
+
 // - `DELETE	/students/1`  delete a specific student
 
 
