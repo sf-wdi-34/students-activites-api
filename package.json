@@ -1,0 +1,11 @@
+{
+  "name": "week-3-review-api",
+  "version": "1.0.0",
+  "description": "students and activities JSON api",
+  "main": "server.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "WDI 34",
+  "license": "ISC"
+}
