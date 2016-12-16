@@ -40,6 +40,13 @@ Each activity can have many / be done by many students.
 
 - `GET	/students`	 	  display a list of all students
 - `POST	/students`	    create a new student
+  - request body should include:
+    - firstName
+    - lastName
+    - monthsOfCoding
+    - hometown
+    - currentTown
+    - coffee
 - `GET	/students/1`	  display a specific student
 - `PUT	/students/1`	  update a specific student
 - `DELETE	/students/1`  delete a specific student

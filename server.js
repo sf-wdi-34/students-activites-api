@@ -2,7 +2,9 @@
 var express = require('express');
 var app = express();
 
-// body parser
+// body parser to get info from request body (form data)
+var bodyParser = require('body-parser');
+app.use(bodyParser.urlencoded({extended: true}));
 
 // require models
 var db = require('./models');  // models folder - not index.js
@@ -34,6 +36,30 @@ app.get('/students', function(request, response){
 });
 
 // - `POST	/students`	    create a new student
+app.post('/students', function(request, response){
+  // grab student info from request body
+  var studentInfo = {
+    // these could be the same if we design and document API carefully
+    firstName: request.body.firstName,
+    lastName: request.body.lastName,
+    monthsCoding: Number(request.body.monthsOfCoding),
+    // monthsCoding: parseInt(request.body.monthsOfCoding),
+    hometown: request.body.hometown,
+    currentTown: request.body.currentTown,
+    likesCoffee: request.body.coffee
+  };
+  // make a new student with student info
+  var newStudent = new db.Student(studentInfo);
+  newStudent.save(function(err, student){
+    // all the code in here executes AFTER student saves (or error)
+    if (err){
+      response.status(500).send('database error');
+      return console.log('error', err);
+    } else {
+      response.json(student);
+    }
+  });
+});
 
 // - `GET	/students/1`	  display a specific student
 // - `PUT	/students/1`	  update a specific student
